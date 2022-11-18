@@ -59,20 +59,9 @@ module lab4_sys_NetRouterRouteUnit
     ostream1_val = 0;
     ostream2_val = 0;
 
-    if ( istream_val ) begin
-      if ( istream_msg_dest == 0 ) begin
-        istream_rdy = ostream0_rdy;
-        ostream0_val = 1;
-      end
-      else if ( istream_msg_dest == 1 ) begin
-        istream_rdy = ostream1_rdy;
-        ostream1_val = 1;
-      end
-      else if ( istream_msg_dest == 2 ) begin
-        istream_rdy = ostream2_rdy;
-        ostream2_val = 1;
-      end
-    end
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    // SECTION TASK: Implement route unit logic
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
   end
 
