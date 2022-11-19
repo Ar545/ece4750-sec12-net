@@ -204,36 +204,48 @@ for i in range(16):
   stream_all_to_dest2.append(msg)
 
 #-------------------------------------------------------------------------
+# Test Cases: Stream All to All Ports
+#-------------------------------------------------------------------------
+
+stream_all_to_all = []
+stream_all_to_all.extend( stream_all_to_dest0 )
+stream_all_to_all.extend( stream_all_to_dest1 )
+stream_all_to_all.extend( stream_all_to_dest2 )
+
+#-------------------------------------------------------------------------
 # Test Case Table
 #-------------------------------------------------------------------------
 
 test_case_table = mk_test_case_table([
-  (                                 "msgs          src_delay sink_delay delay_mode"),
-  [ "one",                           one,                 0,  0,  'fixed'  ],
-  [ "rotate0",                       rotate0,             0,  0,  'fixed'  ],
-  [ "rotate1",                       rotate1,             0,  0,  'fixed'  ],
-  [ "rotate2",                       rotate2,             0,  0,  'fixed'  ],
-  [ "all_to_dest0",                  all_to_dest0,        0,  0,  'fixed'  ],
-  [ "all_to_dest1",                  all_to_dest1,        0,  0,  'fixed'  ],
-  [ "all_to_dest2",                  all_to_dest2,        0,  0,  'fixed'  ],
-  [ "stream_to_dest0",               stream_to_dest0,     0,  0,  'fixed'  ],
-  [ "stream_to_dest1",               stream_to_dest1,     0,  0,  'fixed'  ],
-  [ "stream_to_dest2",               stream_to_dest2,     0,  0,  'fixed'  ],
-  [ "stream_all_to_dest0",           stream_all_to_dest0, 0,  0,  'fixed'  ],
-  [ "stream_all_to_dest1",           stream_all_to_dest1, 0,  0,  'fixed'  ],
-  [ "stream_all_to_dest2",           stream_all_to_dest2, 0,  0,  'fixed'  ],
+  (                                  "msgs          src_delay sink_delay delay_mode"),
+  [ "one",                            one,                 0,  0,  'fixed'  ],
+  [ "rotate0",                        rotate0,             0,  0,  'fixed'  ],
+  [ "rotate1",                        rotate1,             0,  0,  'fixed'  ],
+  [ "rotate2",                        rotate2,             0,  0,  'fixed'  ],
+  [ "all_to_dest0",                   all_to_dest0,        0,  0,  'fixed'  ],
+  [ "all_to_dest1",                   all_to_dest1,        0,  0,  'fixed'  ],
+  [ "all_to_dest2",                   all_to_dest2,        0,  0,  'fixed'  ],
+  [ "stream_to_dest0",                stream_to_dest0,     0,  0,  'fixed'  ],
+  [ "stream_to_dest1",                stream_to_dest1,     0,  0,  'fixed'  ],
+  [ "stream_to_dest2",                stream_to_dest2,     0,  0,  'fixed'  ],
+  [ "stream_all_to_dest0",            stream_all_to_dest0, 0,  0,  'fixed'  ],
+  [ "stream_all_to_dest1",            stream_all_to_dest1, 0,  0,  'fixed'  ],
+  [ "stream_all_to_dest2",            stream_all_to_dest2, 0,  0,  'fixed'  ],
+  [ "stream_all_to_all",              stream_all_to_all,   0,  0,  'fixed'  ],
 
-  [ "stream_to_dest0_fixed_2x0",     stream_to_dest0,     2,  0,  'fixed'  ],
-  [ "stream_to_dest1_fixed_2x0",     stream_to_dest1,     2,  0,  'fixed'  ],
-  [ "stream_to_dest2_fixed_2x0",     stream_to_dest2,     2,  0,  'fixed'  ],
+  [ "stream_to_dest0_fixed_2x0",      stream_to_dest0,     2,  0,  'fixed'  ],
+  [ "stream_to_dest1_fixed_2x0",      stream_to_dest1,     2,  0,  'fixed'  ],
+  [ "stream_to_dest2_fixed_2x0",      stream_to_dest2,     2,  0,  'fixed'  ],
 
-  [ "stream_all_to_dest0_fixed_0x2", stream_all_to_dest0, 0,  2,  'fixed'  ],
-  [ "stream_all_to_dest1_fixed_0x2", stream_all_to_dest1, 0,  2,  'fixed'  ],
-  [ "stream_all_to_dest2_fixed_0x2", stream_all_to_dest2, 0,  2,  'fixed'  ],
+  [ "stream_all_to_dest0_fixed_0x2",  stream_all_to_dest0, 0,  2,  'fixed'  ],
+  [ "stream_all_to_dest1_fixed_0x2",  stream_all_to_dest1, 0,  2,  'fixed'  ],
+  [ "stream_all_to_dest2_fixed_0x2",  stream_all_to_dest2, 0,  2,  'fixed'  ],
+  [ "stream_all_to_all_fixed_0x2",    stream_all_to_all,   0,  2,  'fixed'  ],
 
   [ "stream_all_to_dest0_rand_delay", stream_all_to_dest0, 0, 20,  'random' ],
   [ "stream_all_to_dest1_rand_delay", stream_all_to_dest1, 0, 20,  'random' ],
   [ "stream_all_to_dest2_rand_delay", stream_all_to_dest2, 0, 20,  'random' ],
+  [ "stream_all_to_all_rand_delay",   stream_all_to_all,   0, 20,  'random' ],
 ])
 
 #-------------------------------------------------------------------------
