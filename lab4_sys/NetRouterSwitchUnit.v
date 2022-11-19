@@ -64,16 +64,20 @@ module lab4_sys_NetRouterSwitchUnit
 
   `ifndef SYNTHESIS
 
+  integer num_reqs = 0;
+
   logic [`VC_TRACE_NBITS-1:0] str;
   `VC_TRACE_BEGIN
   begin
 
-    if ( ostream_val && ostream_rdy ) begin
-      $sformat( str, "%d", selected_input );
-      vc_trace.append_str( trace_str, str );
-    end
-    else
-      vc_trace.append_str( trace_str, " " );
+    num_reqs = istream0_val + istream1_val + istream2_val;
+
+    case ( num_reqs )
+      0: vc_trace.append_str( trace_str, " " );
+      1: vc_trace.append_str( trace_str, "." );
+      2: vc_trace.append_str( trace_str, ":" );
+      3: vc_trace.append_str( trace_str, "#" );
+    endcase
 
   end
   `VC_TRACE_END

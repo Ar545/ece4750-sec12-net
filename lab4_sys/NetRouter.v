@@ -48,13 +48,13 @@ module lab4_sys_NetRouter
   output logic                   ostream0_val,
   input  logic                   ostream0_rdy,
 
-  // Output stream 0
+  // Output stream 1
 
   output logic [p_msg_nbits-1:0] ostream1_msg,
   output logic                   ostream1_val,
   input  logic                   ostream1_rdy,
 
-  // Output stream 0
+  // Output stream 2
 
   output logic [p_msg_nbits-1:0] ostream2_msg,
   output logic                   ostream2_val,
@@ -352,31 +352,31 @@ module lab4_sys_NetRouter
 
     // Line tracing for input queues
 
-    case ( inq0_num_free_entries )
-      4:       vc_trace.append_str( trace_str, " " );
-      0:       vc_trace.append_str( trace_str, "#" );
-      default: vc_trace.append_str( trace_str, "." );
-    endcase
-
-    case ( inq0_num_free_entries )
-      4:       vc_trace.append_str( trace_str, " " );
-      0:       vc_trace.append_str( trace_str, "#" );
-      default: vc_trace.append_str( trace_str, "." );
-    endcase
-
-    case ( inq0_num_free_entries )
-      4:       vc_trace.append_str( trace_str, " " );
-      0:       vc_trace.append_str( trace_str, "#" );
-      default: vc_trace.append_str( trace_str, "." );
-    endcase
-
     vc_trace.append_str( trace_str, "(" );
 
-    // Line tracing for route units
+    case ( inq0_num_free_entries )
+      4: vc_trace.append_str( trace_str, " " );
+      3: vc_trace.append_str( trace_str, "." );
+      2: vc_trace.append_str( trace_str, ":" );
+      1: vc_trace.append_str( trace_str, "*" );
+      0: vc_trace.append_str( trace_str, "#" );
+    endcase
 
-    runit0.line_trace( trace_str );
-    runit1.line_trace( trace_str );
-    runit2.line_trace( trace_str );
+    case ( inq1_num_free_entries )
+      4: vc_trace.append_str( trace_str, " " );
+      3: vc_trace.append_str( trace_str, "." );
+      2: vc_trace.append_str( trace_str, ":" );
+      1: vc_trace.append_str( trace_str, "*" );
+      0: vc_trace.append_str( trace_str, "#" );
+    endcase
+
+    case ( inq2_num_free_entries )
+      4: vc_trace.append_str( trace_str, " " );
+      3: vc_trace.append_str( trace_str, "." );
+      2: vc_trace.append_str( trace_str, ":" );
+      1: vc_trace.append_str( trace_str, "*" );
+      0: vc_trace.append_str( trace_str, "#" );
+    endcase
 
     vc_trace.append_str( trace_str, "|" );
 

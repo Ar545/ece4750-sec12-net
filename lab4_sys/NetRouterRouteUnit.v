@@ -32,13 +32,13 @@ module lab4_sys_NetRouterRouteUnit
   output logic                   ostream0_val,
   input  logic                   ostream0_rdy,
 
-  // Output stream 0
+  // Output stream 1
 
   output logic [p_msg_nbits-1:0] ostream1_msg,
   output logic                   ostream1_val,
   input  logic                   ostream1_rdy,
 
-  // Output stream 0
+  // Output stream 2
 
   output logic [p_msg_nbits-1:0] ostream2_msg,
   output logic                   ostream2_val,
