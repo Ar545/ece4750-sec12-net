@@ -16,23 +16,11 @@ module lab4_sys_NetRouterSwitchUnit
   input  logic                   clk,
   input  logic                   reset,
 
-  // Input stream 0
+  // Input streams
 
-  input  logic [p_msg_nbits-1:0] istream0_msg,
-  input  logic                   istream0_val,
-  output logic                   istream0_rdy,
-
-  // Input stream 1
-
-  input  logic [p_msg_nbits-1:0] istream1_msg,
-  input  logic                   istream1_val,
-  output logic                   istream1_rdy,
-
-  // Input stream 2
-
-  input  logic [p_msg_nbits-1:0] istream2_msg,
-  input  logic                   istream2_val,
-  output logic                   istream2_rdy,
+  input  logic [p_msg_nbits-1:0] istream_msg [3],
+  input  logic                   istream_val [3],
+  output logic                   istream_rdy [3],
 
   // Output stream
 
@@ -41,20 +29,20 @@ module lab4_sys_NetRouterSwitchUnit
   input  logic                   ostream_rdy
 );
 
-  // For line tracing
   logic [1:0] selected_input;
 
   always_comb begin
 
     selected_input = 0;
-    istream0_rdy   = 0;
-    istream1_rdy   = 0;
-    istream2_rdy   = 0;
+    istream_rdy[0] = 0;
+    istream_rdy[1] = 0;
+    istream_rdy[2] = 0;
     ostream_val    = 0;
+    ostream_msg    = 0;
 
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    // SECTION TASK: Implement switch unit logic
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    //''' SECTION TASK '''''''''''''''''''''''''''''''''''''''''''''''''''
+    // Implement switch unit logic
+    // ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
   end
 
@@ -70,7 +58,7 @@ module lab4_sys_NetRouterSwitchUnit
   `VC_TRACE_BEGIN
   begin
 
-    num_reqs = istream0_val + istream1_val + istream2_val;
+    num_reqs = istream_val[0] + istream_val[1] + istream_val[2];
 
     case ( num_reqs )
       0: vc_trace.append_str( trace_str, " " );

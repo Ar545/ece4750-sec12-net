@@ -23,34 +23,31 @@ NetMsgType = mk_net_msg( 32 )
 
 class TestHarness( Component ):
 
-  def construct( s ):
+  def construct( s, router_id=0 ):
 
     # Instantiate models
 
     s.src   = StreamSourceFL( NetMsgType )
-
-    s.runit = NetRouterRouteUnit( 44 )
-
-    s.sink0 = StreamSinkFL  ( NetMsgType )
-    s.sink1 = StreamSinkFL  ( NetMsgType )
-    s.sink2 = StreamSinkFL  ( NetMsgType )
+    s.runit = NetRouterRouteUnit( p_msg_nbits=44 )
+    s.sinks = [ StreamSinkFL( NetMsgType ) for _ in range(3) ]
 
     # Connect
 
-    s.src.ostream    //= s.runit.istream
-    s.runit.ostream0 //= s.sink0.istream
-    s.runit.ostream1 //= s.sink1.istream
-    s.runit.ostream2 //= s.sink2.istream
+    s.runit.router_id  //= router_id
+    s.src.ostream      //= s.runit.istream
+    s.runit.ostream[0] //= s.sinks[0].istream
+    s.runit.ostream[1] //= s.sinks[1].istream
+    s.runit.ostream[2] //= s.sinks[2].istream
 
   def done( s ):
-    return s.src.done() and s.sink0.done() and s.sink1.done() and s.sink2.done()
+    return s.src.done() and s.sinks[0].done() and s.sinks[1].done() and s.sinks[2].done()
 
   def line_trace( s ):
     return s.src.line_trace()   + " > (" + \
            s.runit.line_trace() + ") > " + \
-           s.sink0.line_trace() + "|" + \
-           s.sink1.line_trace() + "|" + \
-           s.sink2.line_trace()
+           s.sinks[0].line_trace() + "|" + \
+           s.sinks[1].line_trace() + "|" + \
+           s.sinks[2].line_trace()
 
 #-------------------------------------------------------------------------
 # test
@@ -58,19 +55,19 @@ class TestHarness( Component ):
 
 def test_basic( cmdline_opts ):
 
-  th = TestHarness()
+  th = TestHarness( router_id=0 )
 
   msgs = [
-    #           dest src  opaq  payload
+    #           src  dest opaq  payload
     NetMsgType( 0,   0,   0x10, 0x10101010 ),
-    NetMsgType( 1,   0,   0x11, 0x11111111 ),
-    NetMsgType( 2,   0,   0x12, 0x12121212 ),
+    NetMsgType( 0,   1,   0x11, 0x11111111 ),
+    NetMsgType( 0,   2,   0x12, 0x12121212 ),
   ]
 
-  th.set_param("top.src.construct",   msgs=msgs  )
-  th.set_param("top.sink0.construct", msgs=[ m for m in msgs if m.dest == 0 ] )
-  th.set_param("top.sink1.construct", msgs=[ m for m in msgs if m.dest == 1 ] )
-  th.set_param("top.sink2.construct", msgs=[ m for m in msgs if m.dest == 2 ] )
+  th.set_param("top.src.construct",      msgs=msgs  )
+  th.set_param("top.sinks[0].construct", msgs=[ m for m in msgs if m.dest == 0 ] )
+  th.set_param("top.sinks[1].construct", msgs=[ m for m in msgs if m.dest == 1 ] )
+  th.set_param("top.sinks[2].construct", msgs=[ m for m in msgs if m.dest == 2 ] )
 
   th.elaborate()
 
@@ -81,22 +78,22 @@ def test_basic( cmdline_opts ):
 #-------------------------------------------------------------------------
 
 one = [
-  #           dest src  opaq  payload
+  #           src  dest opaq  payload
   NetMsgType( 0,   0,   0x10, 0x10101010 ),
 ]
 
 three = [
-  #           dest src  opaq  payload
+  #           src  dest opaq  payload
   NetMsgType( 0,   0,   0x10, 0x10101010 ),
-  NetMsgType( 1,   0,   0x11, 0x11111111 ),
-  NetMsgType( 2,   0,   0x12, 0x12121212 ),
+  NetMsgType( 0,   1,   0x11, 0x11111111 ),
+  NetMsgType( 0,   2,   0x12, 0x12121212 ),
 ]
 
 three_diff_src = [
-  #           dest src  opaq  payload
-  NetMsgType( 0,   3,   0x10, 0x10101010 ),
-  NetMsgType( 1,   2,   0x11, 0x11111111 ),
-  NetMsgType( 2,   1,   0x12, 0x12121212 ),
+  #           src  dest opaq  payload
+  NetMsgType( 3,   0,   0x10, 0x10101010 ),
+  NetMsgType( 2,   1,   0x11, 0x11111111 ),
+  NetMsgType( 1,   2,   0x12, 0x12121212 ),
 ]
 
 #-------------------------------------------------------------------------
@@ -105,17 +102,17 @@ three_diff_src = [
 
 stream_to_dest0 = []
 for i in range(16):
-  msg = NetMsgType( dest=0, src=0, opaque=i, payload=i )
+  msg = NetMsgType( src=0, dest=0, opaque=i, payload=i )
   stream_to_dest0.append( msg )
 
 stream_to_dest1 = []
 for i in range(16):
-  msg = NetMsgType( dest=1, src=0, opaque=i, payload=i )
+  msg = NetMsgType( src=0, dest=1, opaque=i, payload=i )
   stream_to_dest1.append( msg )
 
 stream_to_dest2 = []
 for i in range(16):
-  msg = NetMsgType( dest=2, src=0, opaque=i, payload=i )
+  msg = NetMsgType( src=0, dest=2, opaque=i, payload=i )
   stream_to_dest2.append( msg )
 
 #-------------------------------------------------------------------------
@@ -124,9 +121,9 @@ for i in range(16):
 
 stream_to_all = []
 for i in range(16):
-  m0 = NetMsgType( dest=0, src=0, opaque=0x00+i, payload=0x0000+i )
-  m1 = NetMsgType( dest=1, src=0, opaque=0x40+i, payload=0x1000+i )
-  m2 = NetMsgType( dest=2, src=0, opaque=0x80+i, payload=0x2000+i )
+  m0 = NetMsgType( src=0, dest=0, opaque=0x00+i, payload=0x0000+i )
+  m1 = NetMsgType( src=0, dest=1, opaque=0x40+i, payload=0x1000+i )
+  m2 = NetMsgType( src=0, dest=2, opaque=0x80+i, payload=0x2000+i )
   stream_to_all.extend([m0, m1, m2])
 
 #-------------------------------------------------------------------------
@@ -163,9 +160,9 @@ test_case_table = mk_test_case_table([
 #-------------------------------------------------------------------------
 
 @pytest.mark.parametrize( **test_case_table )
-def test_basic( test_params, cmdline_opts ):
+def test( test_params, cmdline_opts ):
 
-  th = TestHarness()
+  th = TestHarness( router_id=0 )
 
   th.set_param("top.src.construct",
     msgs                = test_params.msgs,
@@ -173,19 +170,19 @@ def test_basic( test_params, cmdline_opts ):
     initial_delay       = test_params.src_delay,
     interval_delay      = test_params.src_delay )
 
-  th.set_param("top.sink0.construct",
+  th.set_param("top.sinks[0].construct",
     msgs                = [ m for m in test_params.msgs if m.dest == 0 ],
     interval_delay_mode = test_params.delay_mode,
     initial_delay       = test_params.sink_delay,
     interval_delay      = test_params.sink_delay )
 
-  th.set_param("top.sink1.construct",
+  th.set_param("top.sinks[1].construct",
     msgs                = [ m for m in test_params.msgs if m.dest == 1 ],
     interval_delay_mode = test_params.delay_mode,
     initial_delay       = test_params.sink_delay,
     interval_delay      = test_params.sink_delay )
 
-  th.set_param("top.sink2.construct",
+  th.set_param("top.sinks[2].construct",
     msgs                = [ m for m in test_params.msgs if m.dest == 2 ],
     interval_delay_mode = test_params.delay_mode,
     initial_delay       = test_params.sink_delay,

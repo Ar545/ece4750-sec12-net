@@ -18,7 +18,7 @@ module lab4_sys_NetRouterRouteUnit
 
   // Router id (which router is this in the network?)
 
-  input  logic     [1:0]         router_id,
+  input  logic [1:0]             router_id,
 
   // Input stream
 
@@ -26,41 +26,29 @@ module lab4_sys_NetRouterRouteUnit
   input  logic                   istream_val,
   output logic                   istream_rdy,
 
-  // Output stream 0
+  // Output streams
 
-  output logic [p_msg_nbits-1:0] ostream0_msg,
-  output logic                   ostream0_val,
-  input  logic                   ostream0_rdy,
-
-  // Output stream 1
-
-  output logic [p_msg_nbits-1:0] ostream1_msg,
-  output logic                   ostream1_val,
-  input  logic                   ostream1_rdy,
-
-  // Output stream 2
-
-  output logic [p_msg_nbits-1:0] ostream2_msg,
-  output logic                   ostream2_val,
-  input  logic                   ostream2_rdy
+  output logic [p_msg_nbits-1:0] ostream_msg [3],
+  output logic                   ostream_val [3],
+  input  logic                   ostream_rdy [3]
 );
 
-  logic [1:0] istream_msg_dest;
-  assign istream_msg_dest = istream_msg[p_msg_nbits-1:p_msg_nbits-2];
+  net_msg_hdr_t istream_msg_hdr;
+  assign istream_msg_hdr = istream_msg[`VC_NET_MSGS_HDR(p_msg_nbits)];
 
-  assign ostream0_msg = istream_msg;
-  assign ostream1_msg = istream_msg;
-  assign ostream2_msg = istream_msg;
+  assign ostream_msg[0] = istream_msg;
+  assign ostream_msg[1] = istream_msg;
+  assign ostream_msg[2] = istream_msg;
 
   always_comb begin
 
     istream_rdy  = 0;
-    ostream0_val = 0;
-    ostream1_val = 0;
-    ostream2_val = 0;
+    ostream_val[0] = 0;
+    ostream_val[1] = 0;
+    ostream_val[2] = 0;
 
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    // SECTION TASK: Implement route unit logic
+    //''' SECTION TASK '''''''''''''''''''''''''''''''''''''''''''''''''''
+    // Implement route unit logic
     //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
   end
@@ -76,7 +64,7 @@ module lab4_sys_NetRouterRouteUnit
   begin
 
     if ( istream_val && istream_rdy ) begin
-      $sformat( str, "%d", istream_msg_dest );
+      $sformat( str, "%d", istream_msg_hdr.dest );
       vc_trace.append_str( trace_str, str );
     end
     else

@@ -196,6 +196,12 @@ destination field.
 Implementing and Testing the Switch Unit
 --------------------------------------------------------------------------
 
+For now just use a fixed priority arbiter. Give highest priority to input
+streams 1 and 2, since they will eventually correspond to the clockwise
+and counter-clockwise channels. We want to priortize messages already in
+the network (input streams 1 and 2) over messages coming from the input
+terminal (input stream 0).
+
 Next we need to implement a very basic switch unit. Take a look at the
 switch unit in `lab4_sys/NetRouterSwitchUnit.v`. The interface looks like
 this:

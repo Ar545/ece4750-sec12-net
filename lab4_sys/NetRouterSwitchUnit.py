@@ -13,8 +13,6 @@ class NetRouterSwitchUnit( VerilogPlaceholder, Component ):
 
     NetMsgType = mk_net_msg( p_msg_nbits-12 )
 
-    s.istream0  = IStreamIfc( NetMsgType )
-    s.istream1  = IStreamIfc( NetMsgType )
-    s.istream2  = IStreamIfc( NetMsgType )
-    s.ostream   = OStreamIfc( NetMsgType )
+    s.istream = [ IStreamIfc( NetMsgType ) for _ in range(3) ]
+    s.ostream = OStreamIfc( NetMsgType )
 
