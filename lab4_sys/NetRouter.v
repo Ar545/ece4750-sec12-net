@@ -120,7 +120,7 @@ module lab4_sys_NetRouter
   logic                   runit0_ostream_val [3];
   logic                   runit0_ostream_rdy [3];
 
-  lab4_sys_NetRouterRouteUnit#(44) runit0
+  lab4_sys_NetRouterRouteUnit#(p_msg_nbits) runit0
   (
     .clk          (clk),
     .reset        (reset),
@@ -141,7 +141,7 @@ module lab4_sys_NetRouter
   logic                   runit1_ostream_val [3];
   logic                   runit1_ostream_rdy [3];
 
-  lab4_sys_NetRouterRouteUnit#(44) runit1
+  lab4_sys_NetRouterRouteUnit#(p_msg_nbits) runit1
   (
     .clk          (clk),
     .reset        (reset),
@@ -162,7 +162,7 @@ module lab4_sys_NetRouter
   logic                   runit2_ostream_val [3];
   logic                   runit2_ostream_rdy [3];
 
-  lab4_sys_NetRouterRouteUnit#(44) runit2
+  lab4_sys_NetRouterRouteUnit#(p_msg_nbits) runit2
   (
     .clk          (clk),
     .reset        (reset),
@@ -183,7 +183,7 @@ module lab4_sys_NetRouter
 
   // Switch unit 0
 
-  lab4_sys_NetRouterSwitchUnit#(44) sunit0
+  lab4_sys_NetRouterSwitchUnit#(p_msg_nbits) sunit0
   (
     .clk          (clk),
     .reset        (reset),
@@ -199,7 +199,7 @@ module lab4_sys_NetRouter
 
   // Switch unit 1
 
-  lab4_sys_NetRouterSwitchUnit#(44) sunit1
+  lab4_sys_NetRouterSwitchUnit#(p_msg_nbits) sunit1
   (
     .clk          (clk),
     .reset        (reset),
@@ -215,7 +215,7 @@ module lab4_sys_NetRouter
 
   // Switch unit 2
 
-  lab4_sys_NetRouterSwitchUnit#(44) sunit2
+  lab4_sys_NetRouterSwitchUnit#(p_msg_nbits) sunit2
   (
     .clk          (clk),
     .reset        (reset),
