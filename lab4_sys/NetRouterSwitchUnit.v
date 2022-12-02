@@ -40,9 +40,24 @@ module lab4_sys_NetRouterSwitchUnit
     ostream_val    = 0;
     ostream_msg    = 0;
 
-    //''' SECTION TASK '''''''''''''''''''''''''''''''''''''''''''''''''''
-    // Implement switch unit logic
-    // ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    if ( istream0_val ) begin
+      selected_input = 0;
+      istream0_rdy   = ostream_rdy;
+      ostream_val    = 1;
+      ostream_msg    = istream0_msg;
+    end
+    else if ( istream1_val ) begin
+      selected_input = 1;
+      istream1_rdy   = ostream_rdy;
+      ostream_val    = 1;
+      ostream_msg    = istream1_msg;
+    end
+    else if ( istream2_val ) begin
+      selected_input = 2;
+      istream2_rdy   = ostream_rdy;
+      ostream_val    = 1;
+      ostream_msg    = istream2_msg;
+    end
 
   end
 
