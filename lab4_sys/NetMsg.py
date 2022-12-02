@@ -8,8 +8,8 @@ def mk_net_msg( payload_nbits ):
 
   @bitstruct
   class NetMsg:
-    dest    : Bits2
     src     : Bits2
+    dest    : Bits2
     opaque  : Bits8
     payload : mk_bits( payload_nbits )
 

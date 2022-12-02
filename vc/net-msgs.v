@@ -1,18 +1,25 @@
 //========================================================================
 // net-msgs : Network Messages
 //========================================================================
-// Network messages are split into two parts: a fixed header, and a
-// variable-width payload. The header provides source and destination
-// information for a 4-node network, along with an 8-bit opaque field.
-// The payload is sent as an additional signal, sent at the same time as
-// the header.
+// Since there is no way to create parameterized structs, we represent
+// network messages as regular bit vectors with a 2-bit field for the
+// source, a 2-bit field for the destination, and an 8-bit field for
+// opaque bits.
 //
-// This is the format defined by the header struct
+// Message Format:
 //
-// 11   10 9    8 7      0 
-// +------+------+--------+
-// | dest | src  | opaque |
-// +------+------+--------+
+//   2-bits  2-bits  8-bits    data_nbits
+//  +-------+-------+--------+-------------------------+
+//  | src   | dest  | opaque | data                    |
+//  +-------+-------+--------+-------------------------+
+//
+// We do define a network header struct, so that users can easily access
+// the header fields like this:
+//
+//  net_msg_hdr_t net_msg_hdr;
+//  net_msg_hdr = net_msg[`VC_NET_MSGS_HDR(msg_nbits)];
+//
+// Then the user can use net_msg_hdr.src or net_msg_hdr.dest.
 //
 
 `ifndef VC_NET_MSGS_V
@@ -25,10 +32,12 @@
 //-------------------------------------------------------------------------
 
 typedef struct packed {
-  logic [1:0] dest;
   logic [1:0] src;
+  logic [1:0] dest;
   logic [7:0] opaque;
-} net_hdr_t;
+} net_msg_hdr_t;
+
+`define VC_NET_MSGS_HDR( msg_nbits ) msg_nbits-1:msg_nbits-12
 
 //------------------------------------------------------------------------
 // Trace message
@@ -46,15 +55,10 @@ module vc_NetMsgTrace
   input  logic                   rdy
 );
 
-  // Extract fields
+  // Extract header
 
-  logic [1:0]    dest;
-  logic [1:0]    src;
-  logic [7:0]    opaque;
-
-  assign dest   = msg[p_msg_nbits-1:p_msg_nbits-2];
-  assign src    = msg[p_msg_nbits-3:p_msg_nbits-4];
-  assign opaque = msg[p_msg_nbits-5:p_msg_nbits-12];
+  net_msg_hdr_t net_msg_hdr;
+  assign net_msg_hdr = msg[`VC_NET_MSGS_HDR(p_msg_nbits)];
 
   // Line tracing
 
@@ -63,7 +67,7 @@ module vc_NetMsgTrace
   `VC_TRACE_BEGIN
   begin
 
-    $sformat( str, "%x>%x:%x", src, dest, opaque );
+    $sformat( str, "%x>%x:%x", net_msg_hdr.src, net_msg_hdr.dest, net_msg_hdr.opaque );
 
     // Trace with val/rdy signals
 

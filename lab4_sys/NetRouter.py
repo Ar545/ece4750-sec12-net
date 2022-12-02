@@ -15,11 +15,6 @@ class NetRouter( VerilogPlaceholder, Component ):
 
     s.router_id = InPort( Bits4 )
 
-    s.istream0  = IStreamIfc( NetMsgType )
-    s.istream1  = IStreamIfc( NetMsgType )
-    s.istream2  = IStreamIfc( NetMsgType )
-
-    s.ostream0  = OStreamIfc( NetMsgType )
-    s.ostream1  = OStreamIfc( NetMsgType )
-    s.ostream2  = OStreamIfc( NetMsgType )
+    s.istream = [ IStreamIfc( NetMsgType ) for _ in range(3) ]
+    s.ostream = [ OStreamIfc( NetMsgType ) for _ in range(3) ]
 

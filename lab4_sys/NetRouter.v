@@ -24,41 +24,17 @@ module lab4_sys_NetRouter
 
   input  logic     [1:0]         router_id,
 
-  // Input stream 0
+  // Input streams
 
-  input  logic [p_msg_nbits-1:0] istream0_msg,
-  input  logic                   istream0_val,
-  output logic                   istream0_rdy,
+  input  logic [p_msg_nbits-1:0] istream_msg [3],
+  input  logic                   istream_val [3],
+  output logic                   istream_rdy [3],
 
-  // Input stream 1
+  // Output streams
 
-  input  logic [p_msg_nbits-1:0] istream1_msg,
-  input  logic                   istream1_val,
-  output logic                   istream1_rdy,
-
-  // Input stream 2
-
-  input  logic [p_msg_nbits-1:0] istream2_msg,
-  input  logic                   istream2_val,
-  output logic                   istream2_rdy,
-
-  // Output stream 0
-
-  output logic [p_msg_nbits-1:0] ostream0_msg,
-  output logic                   ostream0_val,
-  input  logic                   ostream0_rdy,
-
-  // Output stream 0
-
-  output logic [p_msg_nbits-1:0] ostream1_msg,
-  output logic                   ostream1_val,
-  input  logic                   ostream1_rdy,
-
-  // Output stream 0
-
-  output logic [p_msg_nbits-1:0] ostream2_msg,
-  output logic                   ostream2_val,
-  input  logic                   ostream2_rdy
+  output logic [p_msg_nbits-1:0] ostream_msg [3],
+  output logic                   ostream_val [3],
+  input  logic                   ostream_rdy [3]
 );
 
   //----------------------------------------------------------------------
@@ -79,9 +55,9 @@ module lab4_sys_NetRouter
     .reset   (reset),
     .num_free_entries(inq0_num_free_entries),
 
-    .enq_msg (istream0_msg),
-    .enq_val (istream0_val),
-    .enq_rdy (istream0_rdy),
+    .enq_msg (istream_msg[0]),
+    .enq_val (istream_val[0]),
+    .enq_rdy (istream_rdy[0]),
 
     .deq_msg (inq0_deq_msg),
     .deq_val (inq0_deq_val),
@@ -102,9 +78,9 @@ module lab4_sys_NetRouter
     .reset   (reset),
     .num_free_entries(inq1_num_free_entries),
 
-    .enq_msg (istream1_msg),
-    .enq_val (istream1_val),
-    .enq_rdy (istream1_rdy),
+    .enq_msg (istream_msg[1]),
+    .enq_val (istream_val[1]),
+    .enq_rdy (istream_rdy[1]),
 
     .deq_msg (inq1_deq_msg),
     .deq_val (inq1_deq_val),
@@ -125,9 +101,9 @@ module lab4_sys_NetRouter
     .reset   (reset),
     .num_free_entries(inq2_num_free_entries),
 
-    .enq_msg (istream2_msg),
-    .enq_val (istream2_val),
-    .enq_rdy (istream2_rdy),
+    .enq_msg (istream_msg[2]),
+    .enq_val (istream_val[2]),
+    .enq_rdy (istream_rdy[2]),
 
     .deq_msg (inq2_deq_msg),
     .deq_val (inq2_deq_val),
@@ -140,19 +116,11 @@ module lab4_sys_NetRouter
 
   // Route unit 0
 
-  logic [p_msg_nbits-1:0] runit0_ostream0_msg;
-  logic                   runit0_ostream0_val;
-  logic                   runit0_ostream0_rdy;
+  logic [p_msg_nbits-1:0] runit0_ostream_msg [3];
+  logic                   runit0_ostream_val [3];
+  logic                   runit0_ostream_rdy [3];
 
-  logic [p_msg_nbits-1:0] runit0_ostream1_msg;
-  logic                   runit0_ostream1_val;
-  logic                   runit0_ostream1_rdy;
-
-  logic [p_msg_nbits-1:0] runit0_ostream2_msg;
-  logic                   runit0_ostream2_val;
-  logic                   runit0_ostream2_rdy;
-
-  lab4_sys_NetRouterRouteUnit#(44) runit0
+  lab4_sys_NetRouterRouteUnit#(p_msg_nbits) runit0
   (
     .clk          (clk),
     .reset        (reset),
@@ -162,32 +130,18 @@ module lab4_sys_NetRouter
     .istream_val  (inq0_deq_val),
     .istream_rdy  (inq0_deq_rdy),
 
-    .ostream0_msg (runit0_ostream0_msg),
-    .ostream0_val (runit0_ostream0_val),
-    .ostream0_rdy (runit0_ostream0_rdy),
-    .ostream1_msg (runit0_ostream1_msg),
-    .ostream1_val (runit0_ostream1_val),
-    .ostream1_rdy (runit0_ostream1_rdy),
-    .ostream2_msg (runit0_ostream2_msg),
-    .ostream2_val (runit0_ostream2_val),
-    .ostream2_rdy (runit0_ostream2_rdy)
+    .ostream_msg  (runit0_ostream_msg),
+    .ostream_val  (runit0_ostream_val),
+    .ostream_rdy  (runit0_ostream_rdy)
   );
 
   // Route unit 1
 
-  logic [p_msg_nbits-1:0] runit1_ostream0_msg;
-  logic                   runit1_ostream0_val;
-  logic                   runit1_ostream0_rdy;
+  logic [p_msg_nbits-1:0] runit1_ostream_msg [3];
+  logic                   runit1_ostream_val [3];
+  logic                   runit1_ostream_rdy [3];
 
-  logic [p_msg_nbits-1:0] runit1_ostream1_msg;
-  logic                   runit1_ostream1_val;
-  logic                   runit1_ostream1_rdy;
-
-  logic [p_msg_nbits-1:0] runit1_ostream2_msg;
-  logic                   runit1_ostream2_val;
-  logic                   runit1_ostream2_rdy;
-
-  lab4_sys_NetRouterRouteUnit#(44) runit1
+  lab4_sys_NetRouterRouteUnit#(p_msg_nbits) runit1
   (
     .clk          (clk),
     .reset        (reset),
@@ -197,32 +151,18 @@ module lab4_sys_NetRouter
     .istream_val  (inq1_deq_val),
     .istream_rdy  (inq1_deq_rdy),
 
-    .ostream0_msg (runit1_ostream0_msg),
-    .ostream0_val (runit1_ostream0_val),
-    .ostream0_rdy (runit1_ostream0_rdy),
-    .ostream1_msg (runit1_ostream1_msg),
-    .ostream1_val (runit1_ostream1_val),
-    .ostream1_rdy (runit1_ostream1_rdy),
-    .ostream2_msg (runit1_ostream2_msg),
-    .ostream2_val (runit1_ostream2_val),
-    .ostream2_rdy (runit1_ostream2_rdy)
+    .ostream_msg  (runit1_ostream_msg),
+    .ostream_val  (runit1_ostream_val),
+    .ostream_rdy  (runit1_ostream_rdy)
   );
 
   // Route unit 2
 
-  logic [p_msg_nbits-1:0] runit2_ostream0_msg;
-  logic                   runit2_ostream0_val;
-  logic                   runit2_ostream0_rdy;
+  logic [p_msg_nbits-1:0] runit2_ostream_msg [3];
+  logic                   runit2_ostream_val [3];
+  logic                   runit2_ostream_rdy [3];
 
-  logic [p_msg_nbits-1:0] runit2_ostream1_msg;
-  logic                   runit2_ostream1_val;
-  logic                   runit2_ostream1_rdy;
-
-  logic [p_msg_nbits-1:0] runit2_ostream2_msg;
-  logic                   runit2_ostream2_val;
-  logic                   runit2_ostream2_rdy;
-
-  lab4_sys_NetRouterRouteUnit#(44) runit2
+  lab4_sys_NetRouterRouteUnit#(p_msg_nbits) runit2
   (
     .clk          (clk),
     .reset        (reset),
@@ -232,15 +172,9 @@ module lab4_sys_NetRouter
     .istream_val  (inq2_deq_val),
     .istream_rdy  (inq2_deq_rdy),
 
-    .ostream0_msg (runit2_ostream0_msg),
-    .ostream0_val (runit2_ostream0_val),
-    .ostream0_rdy (runit2_ostream0_rdy),
-    .ostream1_msg (runit2_ostream1_msg),
-    .ostream1_val (runit2_ostream1_val),
-    .ostream1_rdy (runit2_ostream1_rdy),
-    .ostream2_msg (runit2_ostream2_msg),
-    .ostream2_val (runit2_ostream2_val),
-    .ostream2_rdy (runit2_ostream2_rdy)
+    .ostream_msg  (runit2_ostream_msg),
+    .ostream_val  (runit2_ostream_val),
+    .ostream_rdy  (runit2_ostream_rdy)
   );
 
   //----------------------------------------------------------------------
@@ -249,68 +183,50 @@ module lab4_sys_NetRouter
 
   // Switch unit 0
 
-  lab4_sys_NetRouterSwitchUnit#(44) sunit0
+  lab4_sys_NetRouterSwitchUnit#(p_msg_nbits) sunit0
   (
     .clk          (clk),
     .reset        (reset),
 
-    .istream0_msg (runit0_ostream0_msg),
-    .istream0_val (runit0_ostream0_val),
-    .istream0_rdy (runit0_ostream0_rdy),
-    .istream1_msg (runit1_ostream0_msg),
-    .istream1_val (runit1_ostream0_val),
-    .istream1_rdy (runit1_ostream0_rdy),
-    .istream2_msg (runit2_ostream0_msg),
-    .istream2_val (runit2_ostream0_val),
-    .istream2_rdy (runit2_ostream0_rdy),
+    .istream_msg  ('{ runit0_ostream_msg[0], runit1_ostream_msg[0], runit2_ostream_msg[0] }),
+    .istream_val  ('{ runit0_ostream_val[0], runit1_ostream_val[0], runit2_ostream_val[0] }),
+    .istream_rdy  ('{ runit0_ostream_rdy[0], runit1_ostream_rdy[0], runit2_ostream_rdy[0] }),
 
-    .ostream_msg  (ostream0_msg),
-    .ostream_val  (ostream0_val),
-    .ostream_rdy  (ostream0_rdy)
+    .ostream_msg  (ostream_msg[0]),
+    .ostream_val  (ostream_val[0]),
+    .ostream_rdy  (ostream_rdy[0])
   );
 
   // Switch unit 1
 
-  lab4_sys_NetRouterSwitchUnit#(44) sunit1
+  lab4_sys_NetRouterSwitchUnit#(p_msg_nbits) sunit1
   (
     .clk          (clk),
     .reset        (reset),
 
-    .istream0_msg (runit0_ostream1_msg),
-    .istream0_val (runit0_ostream1_val),
-    .istream0_rdy (runit0_ostream1_rdy),
-    .istream1_msg (runit1_ostream1_msg),
-    .istream1_val (runit1_ostream1_val),
-    .istream1_rdy (runit1_ostream1_rdy),
-    .istream2_msg (runit2_ostream1_msg),
-    .istream2_val (runit2_ostream1_val),
-    .istream2_rdy (runit2_ostream1_rdy),
+    .istream_msg  ('{ runit0_ostream_msg[1], runit1_ostream_msg[1], runit2_ostream_msg[1] }),
+    .istream_val  ('{ runit0_ostream_val[1], runit1_ostream_val[1], runit2_ostream_val[1] }),
+    .istream_rdy  ('{ runit0_ostream_rdy[1], runit1_ostream_rdy[1], runit2_ostream_rdy[1] }),
 
-    .ostream_msg  (ostream1_msg),
-    .ostream_val  (ostream1_val),
-    .ostream_rdy  (ostream1_rdy)
+    .ostream_msg  (ostream_msg[1]),
+    .ostream_val  (ostream_val[1]),
+    .ostream_rdy  (ostream_rdy[1])
   );
 
   // Switch unit 2
 
-  lab4_sys_NetRouterSwitchUnit#(44) sunit2
+  lab4_sys_NetRouterSwitchUnit#(p_msg_nbits) sunit2
   (
     .clk          (clk),
     .reset        (reset),
 
-    .istream0_msg (runit0_ostream2_msg),
-    .istream0_val (runit0_ostream2_val),
-    .istream0_rdy (runit0_ostream2_rdy),
-    .istream1_msg (runit1_ostream2_msg),
-    .istream1_val (runit1_ostream2_val),
-    .istream1_rdy (runit1_ostream2_rdy),
-    .istream2_msg (runit2_ostream2_msg),
-    .istream2_val (runit2_ostream2_val),
-    .istream2_rdy (runit2_ostream2_rdy),
+    .istream_msg  ('{ runit0_ostream_msg[2], runit1_ostream_msg[2], runit2_ostream_msg[2] }),
+    .istream_val  ('{ runit0_ostream_val[2], runit1_ostream_val[2], runit2_ostream_val[2] }),
+    .istream_rdy  ('{ runit0_ostream_rdy[2], runit1_ostream_rdy[2], runit2_ostream_rdy[2] }),
 
-    .ostream_msg  (ostream2_msg),
-    .ostream_val  (ostream2_val),
-    .ostream_rdy  (ostream2_rdy)
+    .ostream_msg  (ostream_msg[2]),
+    .ostream_val  (ostream_val[2]),
+    .ostream_rdy  (ostream_rdy[2])
   );
 
   //----------------------------------------------------------------------
@@ -323,27 +239,27 @@ module lab4_sys_NetRouter
   (
     .clk   (clk),
     .reset (reset),
-    .msg   (ostream0_msg),
-    .val   (ostream0_val),
-    .rdy   (ostream0_rdy)
+    .msg   (ostream_msg[0]),
+    .val   (ostream_val[0]),
+    .rdy   (ostream_rdy[0])
   );
 
   vc_NetMsgTrace#(p_msg_nbits) ostream1_trace
   (
     .clk   (clk),
     .reset (reset),
-    .msg   (ostream1_msg),
-    .val   (ostream1_val),
-    .rdy   (ostream1_rdy)
+    .msg   (ostream_msg[1]),
+    .val   (ostream_val[1]),
+    .rdy   (ostream_rdy[1])
   );
 
   vc_NetMsgTrace#(p_msg_nbits) ostream2_trace
   (
     .clk   (clk),
     .reset (reset),
-    .msg   (ostream2_msg),
-    .val   (ostream2_val),
-    .rdy   (ostream2_rdy)
+    .msg   (ostream_msg[2]),
+    .val   (ostream_val[2]),
+    .rdy   (ostream_rdy[2])
   );
 
   logic [`VC_TRACE_NBITS-1:0] str;
@@ -353,30 +269,28 @@ module lab4_sys_NetRouter
     // Line tracing for input queues
 
     case ( inq0_num_free_entries )
-      4:       vc_trace.append_str( trace_str, " " );
-      0:       vc_trace.append_str( trace_str, "#" );
-      default: vc_trace.append_str( trace_str, "." );
+      4: vc_trace.append_str( trace_str, " " );
+      3: vc_trace.append_str( trace_str, "." );
+      2: vc_trace.append_str( trace_str, ":" );
+      1: vc_trace.append_str( trace_str, "*" );
+      0: vc_trace.append_str( trace_str, "#" );
     endcase
 
-    case ( inq0_num_free_entries )
-      4:       vc_trace.append_str( trace_str, " " );
-      0:       vc_trace.append_str( trace_str, "#" );
-      default: vc_trace.append_str( trace_str, "." );
+    case ( inq1_num_free_entries )
+      4: vc_trace.append_str( trace_str, " " );
+      3: vc_trace.append_str( trace_str, "." );
+      2: vc_trace.append_str( trace_str, ":" );
+      1: vc_trace.append_str( trace_str, "*" );
+      0: vc_trace.append_str( trace_str, "#" );
     endcase
 
-    case ( inq0_num_free_entries )
-      4:       vc_trace.append_str( trace_str, " " );
-      0:       vc_trace.append_str( trace_str, "#" );
-      default: vc_trace.append_str( trace_str, "." );
+    case ( inq2_num_free_entries )
+      4: vc_trace.append_str( trace_str, " " );
+      3: vc_trace.append_str( trace_str, "." );
+      2: vc_trace.append_str( trace_str, ":" );
+      1: vc_trace.append_str( trace_str, "*" );
+      0: vc_trace.append_str( trace_str, "#" );
     endcase
-
-    vc_trace.append_str( trace_str, "(" );
-
-    // Line tracing for route units
-
-    runit0.line_trace( trace_str );
-    runit1.line_trace( trace_str );
-    runit2.line_trace( trace_str );
 
     vc_trace.append_str( trace_str, "|" );
 
@@ -385,16 +299,6 @@ module lab4_sys_NetRouter
     sunit0.line_trace( trace_str );
     sunit1.line_trace( trace_str );
     sunit2.line_trace( trace_str );
-
-    vc_trace.append_str( trace_str, ")" );
-
-    // Line tracing for output streams
-
-    ostream0_trace.line_trace( trace_str );
-    vc_trace.append_str( trace_str, "|" );
-    ostream1_trace.line_trace( trace_str );
-    vc_trace.append_str( trace_str, "|" );
-    ostream2_trace.line_trace( trace_str );
 
   end
   `VC_TRACE_END
